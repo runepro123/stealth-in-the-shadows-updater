@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stealth in the Shadows</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        margin: 0;
+        background-color: #050505;
+        overflow: hidden;
+        font-family: 'Courier New', Courier, monospace; /* Retro font */
+      }
+      canvas {
+        display: block;
+      }
+      
+      /* CRT EFFECTS */
+      .crt-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: linear-gradient(
+          rgba(18, 16, 16, 0) 50%, 
+          rgba(0, 0, 0, 0.25) 50%
+        );
+        background-size: 100% 4px;
+        z-index: 999;
+        pointer-events: none;
+        animation: scanlines 0.2s linear infinite;
+      }
+      
+      .vignette {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.6) 100%);
+        z-index: 998;
+        pointer-events: none;
+      }
+
+      @keyframes scanlines {
+        0% { transform: translateY(0px); }
+        100% { transform: translateY(4px); }
+      }
+
+      .chromatic-aberration {
+        animation: glitch 2s infinite;
+      }
+
+      @keyframes glitch {
+        0% { text-shadow: 2px 0 rgba(255,0,0,0.5), -2px 0 rgba(0,255,255,0.5); }
+        25% { text-shadow: -2px 0 rgba(255,0,0,0.5), 2px 0 rgba(0,255,255,0.5); }
+        50% { text-shadow: 2px 0 rgba(255,0,0,0.5), -2px 0 rgba(0,255,255,0.5); }
+        100% { text-shadow: -2px 0 rgba(255,0,0,0.5), 2px 0 rgba(0,255,255,0.5); }
+      }
+
+      /* CUTSCENE BARS */
+      .cutscene-bar {
+        position: fixed;
+        left: 0;
+        width: 100%;
+        height: 0;
+        background-color: black;
+        z-index: 100;
+        transition: height 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+      }
+      .cutscene-bar.active {
+        height: 12vh;
+        border-bottom: 2px solid #00BFFF;
+      }
+      .cutscene-bar.active.bottom {
+        border-bottom: none;
+        border-top: 2px solid #00BFFF;
+        bottom: 0;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <div class="crt-overlay"></div>
+    <div class="vignette"></div>
+    <div class="cutscene-bar top"></div>
+    <div class="cutscene-bar bottom"></div>
+  </body>
+</html>

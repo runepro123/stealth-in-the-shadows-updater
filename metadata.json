@@ -1,0 +1,5 @@
+{
+  "name": "Stealth in the Shadows",
+  "description": "A top-down atmospheric stealth game where you must navigate procedurally generated levels, avoid enemy vision cones, and stick to the shadows. Supports single-player and local co-op.",
+  "requestFramePermissions": []
+}

@@ -1,0 +1,70 @@
+{
+  "name": "stealth-in-the-shadows",
+  "version": "1.0.0",
+  "private": true,
+  "main": "main.js",
+  "homepage": "./",
+  "description": "A top-down atmospheric stealth game.",
+  "author": {
+    "name": "StealthDev",
+    "email": "dev@stealthintheshadows.com"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "lucide-react": "^0.263.1",
+    "electron-updater": "^6.1.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "electron:dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron:build": "npm run build && electron-builder -w",
+    "electron:publish": "npm run build && electron-builder -w -p always"
+  },
+  "build": {
+    "appId": "com.stealth.shadows",
+    "productName": "Stealth in the Shadows",
+    "files": [
+      "build/**/*",
+      "main.js",
+      "preload.js"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "[YOUR_GITHUB_USERNAME]",
+        "repo": "[YOUR_REPO_NAME]"
+      }
+    ]
+  },
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1",
+    "concurrently": "^8.2.0",
+    "wait-on": "^7.2.0",
+    "cross-env": "^7.0.3",
+    "tailwindcss": "^3.4.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
