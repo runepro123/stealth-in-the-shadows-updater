@@ -10,5 +10,8 @@ contextBridge.exposeInMainWorld('electron', {
     const cb = (event, data) => callback(data);
     ipcRenderer.on('update_progress', cb);
     return () => ipcRenderer.removeListener('update_progress', cb);
-  }
+  },
+  saveGame: (data) => ipcRenderer.invoke('save-game', data),
+  loadGame: () => ipcRenderer.invoke('load-game'),
+  deleteSave: () => ipcRenderer.invoke('delete-save')
 });

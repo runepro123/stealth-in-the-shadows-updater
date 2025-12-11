@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
+const fs = require('fs');
 
 // Logging
 autoUpdater.logger = log;
@@ -50,6 +51,58 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
+  }
+});
+
+// --- FILE SYSTEM IPC HANDLERS ---
+
+const getSavePath = () => {
+  const documentsPath = app.getPath('documents');
+  return path.join(documentsPath, 'Dev City Studio', 'Stealth in the Shadows');
+};
+
+const getSaveFile = () => {
+  return path.join(getSavePath(), 'save_data.json');
+};
+
+ipcMain.handle('save-game', async (event, data) => {
+  try {
+    const saveDir = getSavePath();
+    if (!fs.existsSync(saveDir)) {
+      fs.mkdirSync(saveDir, { recursive: true });
+    }
+    fs.writeFileSync(getSaveFile(), JSON.stringify(data, null, 2));
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to save game:', error);
+    return { success: false, error: error.message };
+  }
+});
+
+ipcMain.handle('load-game', async () => {
+  try {
+    const saveFile = getSaveFile();
+    if (fs.existsSync(saveFile)) {
+      const data = fs.readFileSync(saveFile, 'utf-8');
+      return JSON.parse(data);
+    }
+    return null;
+  } catch (error) {
+    console.error('Failed to load game:', error);
+    return null;
+  }
+});
+
+ipcMain.handle('delete-save', async () => {
+  try {
+    const saveFile = getSaveFile();
+    if (fs.existsSync(saveFile)) {
+      fs.unlinkSync(saveFile);
+    }
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to delete save:', error);
+    return { success: false, error: error.message };
   }
 });
 

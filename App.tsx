@@ -13,10 +13,13 @@ const App: React.FC = () => {
 
   useEffect(() => {
     // Check for save data on mount and whenever returning to menu
-    if (appMode === 'MENU' || appMode === 'LEVEL_SELECT') {
-      const data = loadGame();
-      setSaveData(data);
-    }
+    const fetchSave = async () => {
+      if (appMode === 'MENU' || appMode === 'LEVEL_SELECT') {
+        const data = await loadGame();
+        setSaveData(data);
+      }
+    };
+    fetchSave();
   }, [appMode]);
 
   const handleStartGame = (mode: AppMode, useSave: boolean, specificLevel?: number) => {
