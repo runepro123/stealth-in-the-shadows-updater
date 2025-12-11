@@ -9,6 +9,10 @@
     "name": "StealthDev",
     "email": "dev@stealthintheshadows.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/runepro123/stealth-in-the-shadows-updater.git"
+  },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -42,8 +46,8 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "[YOUR_GITHUB_USERNAME]",
-        "repo": "[YOUR_REPO_NAME]"
+        "owner": "runepro123",
+        "repo": "stealth-in-the-shadows-updater"
       }
     ]
   },
