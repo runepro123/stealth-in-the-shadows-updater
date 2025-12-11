@@ -1,9 +1,10 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const { autoUpdater } = require('electron-updater');
+const log = require('electron-log');
 
 // Logging
-autoUpdater.logger = require("electron-log");
+autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = "info";
 
 let mainWindow;
@@ -16,7 +17,7 @@ function createWindow() {
     minHeight: 768,
     title: "Stealth in the Shadows",
     backgroundColor: '#050505',
-    icon: path.join(__dirname, 'build/favicon.ico'),
+    icon: path.join(__dirname, 'dist/favicon.ico'), // Updated to dist
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -24,7 +25,8 @@ function createWindow() {
     },
   });
 
-  const startUrl = process.env.ELECTRON_START_URL || `file://${path.join(__dirname, './build/index.html')}`;
+  // Load from Vite dev server (5173) or local build (dist/index.html)
+  const startUrl = process.env.ELECTRON_START_URL || `file://${path.join(__dirname, './dist/index.html')}`;
   mainWindow.loadURL(startUrl);
 
   // Remove default menu for immersion
@@ -66,6 +68,7 @@ autoUpdater.on('update-not-available', () => {
 });
 
 autoUpdater.on('error', (err) => {
+  log.error(err); // Log the error for debugging
   if(mainWindow) mainWindow.webContents.send('update_status', { status: 'error', msg: 'UPLINK FAILED' });
 });
 
