@@ -8,6 +8,11 @@ const fs = require('fs');
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = "info";
 
+// CRITICAL FIX: Disable signature verification for unsigned/self-signed GitHub releases
+autoUpdater.verifyUpdateCodeSignature = false; 
+autoUpdater.autoDownload = true;
+autoUpdater.autoInstallOnAppQuit = true;
+
 let mainWindow;
 
 function createWindow() {
@@ -18,7 +23,7 @@ function createWindow() {
     minHeight: 768,
     title: "Stealth in the Shadows",
     backgroundColor: '#050505',
-    icon: path.join(__dirname, 'dist/favicon.ico'), // Updated to dist
+    icon: path.join(__dirname, 'dist/favicon.ico'), 
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -36,7 +41,10 @@ function createWindow() {
   // Auto Update Logic - triggers immediately on launch
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
-    autoUpdater.checkForUpdatesAndNotify();
+    // Check for updates after a short delay to ensure window is ready
+    setTimeout(() => {
+        autoUpdater.checkForUpdatesAndNotify();
+    }, 1500);
   });
 }
 
@@ -121,8 +129,12 @@ autoUpdater.on('update-not-available', () => {
 });
 
 autoUpdater.on('error', (err) => {
-  log.error(err); // Log the error for debugging
-  if(mainWindow) mainWindow.webContents.send('update_status', { status: 'error', msg: 'UPLINK FAILED' });
+  log.error("Update error:", err); 
+  if(mainWindow) mainWindow.webContents.send('update_status', { 
+      status: 'error', 
+      msg: 'UPLINK FAILED',
+      detail: err.message || JSON.stringify(err) // Send specific error to UI
+  });
 });
 
 autoUpdater.on('download-progress', (progressObj) => {

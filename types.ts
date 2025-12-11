@@ -3,7 +3,7 @@ export type Point = { x: number; y: number };
 
 // --- ELECTRON TYPES ---
 export interface ElectronAPI {
-  onUpdateStatus: (callback: (data: { status: string; msg: string }) => void) => () => void;
+  onUpdateStatus: (callback: (data: { status: string; msg: string; detail?: string }) => void) => () => void;
   onUpdateProgress: (callback: (data: { percent: number; speed: number; transferred: number; total: number }) => void) => () => void;
   saveGame: (data: GameSave) => Promise<{ success: boolean; error?: string }>;
   loadGame: () => Promise<GameSave | null>;

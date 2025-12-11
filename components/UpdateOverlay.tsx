@@ -4,6 +4,7 @@ import { Download, RefreshCw, AlertTriangle, CheckCircle, Database } from 'lucid
 interface UpdateState {
   status: string; // checking, available, none, error, ready
   msg: string;
+  detail?: string;
 }
 
 interface ProgressState {
@@ -27,7 +28,10 @@ export const UpdateOverlay: React.FC = () => {
       setUpdateState(data);
       if (data.status === 'checking' || data.status === 'available' || data.status === 'ready') {
         setVisible(true);
-      } else if (data.status === 'none' || data.status === 'error') {
+      } else if (data.status === 'error') {
+        setVisible(true);
+        // Don't auto-hide error so user can read it
+      } else if (data.status === 'none') {
         // Hide after a brief delay
         setTimeout(() => setVisible(false), 3000);
       }
@@ -66,12 +70,21 @@ export const UpdateOverlay: React.FC = () => {
             </div>
 
             {/* Status Message */}
-            <div className="flex items-center gap-4 mb-8">
-                {updateState.status === 'checking' && <RefreshCw className="animate-spin" size={32} />}
-                {updateState.status === 'available' && <Download className="animate-bounce" size={32} />}
-                {updateState.status === 'ready' && <CheckCircle className="text-green-400" size={32} />}
-                {updateState.status === 'error' && <AlertTriangle className="text-red-500" size={32} />}
-                <div className="text-xl uppercase">{updateState.msg}</div>
+            <div className="flex flex-col gap-4 mb-8">
+                <div className="flex items-center gap-4">
+                  {updateState.status === 'checking' && <RefreshCw className="animate-spin" size={32} />}
+                  {updateState.status === 'available' && <Download className="animate-bounce" size={32} />}
+                  {updateState.status === 'ready' && <CheckCircle className="text-green-400" size={32} />}
+                  {updateState.status === 'error' && <AlertTriangle className="text-red-500" size={32} />}
+                  <div className="text-xl uppercase">{updateState.msg}</div>
+                </div>
+                
+                {/* Error Detail Display */}
+                {updateState.status === 'error' && updateState.detail && (
+                    <div className="p-2 bg-red-900/20 border border-red-800 text-red-400 text-[10px] font-mono break-all max-h-24 overflow-y-auto">
+                        ERR_LOG: {updateState.detail}
+                    </div>
+                )}
             </div>
 
             {/* Progress Bar */}
@@ -110,6 +123,16 @@ export const UpdateOverlay: React.FC = () => {
                 </div>
                 <Database size={16} />
             </div>
+            
+            {/* Close Button if Error or Done */}
+            {(updateState.status === 'error' || updateState.status === 'none') && (
+                <button 
+                    onClick={() => setVisible(false)}
+                    className="absolute top-4 right-4 text-green-700 hover:text-green-400 text-xs"
+                >
+                    [CLOSE]
+                </button>
+            )}
         </div>
     </div>
   );
