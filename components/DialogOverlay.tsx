@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
 import { DialogLine } from '../types';
-import { Bot, User, Headset, Cpu, ChevronRight } from 'lucide-react';
+import { Bot, User, Headphones, Cpu, ChevronRight } from 'lucide-react';
 
 interface DialogOverlayProps {
   script: DialogLine[];
@@ -60,7 +59,7 @@ export const DialogOverlay: React.FC<DialogOverlayProps> = ({ script, onComplete
 
   const getIcon = (avatar: string) => {
     switch (avatar) {
-      case 'ECHO': return <Headset size={64} />;
+      case 'ECHO': return <Headphones size={64} />;
       case 'AGENT': return <User size={64} />;
       case 'ARCHITECT': return <Bot size={64} />;
       case 'SYSTEM': return <Cpu size={64} />;
